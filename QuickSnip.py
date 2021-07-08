@@ -3,10 +3,12 @@ import PySimpleGUI as sg
 import subprocess
 import os
 import d3dshot
+import time
 
 def Launcher():
     def print(line):
         window['output'].update(line)
+        window.Refresh()
     sg.theme('black')
 
     sg.set_options(element_padding=(1,1), button_element_size=(10,1), auto_size_buttons=False)
@@ -26,17 +28,29 @@ def Launcher():
 
     while True:
         event, values = window.read()
-        if event == 'x' or event is None:
+        if event == 'x' or event == sg.WIN_CLOSED:
             break
         if event == 'snip':
             try:
                 print('Saving screenshot...please wait')
-                window.Refresh()
                 d = d3dshot.create()
-                vF = values['-vFilename-']
-                vP = values['-vFolder-']
-                d.screenshot_to_disk(directory=vP, file_name=str(vF + '.png'))
-                print(' ')
+                vFilename = values['-vFilename-']
+                vPath = values['-vFolder-']
+                picPath = str(vPath + '/' + vFilename + '.png')
+                if os.path.isfile(picPath):
+                    expand = 1
+                    while True:
+                        expand += 1
+                        vFilenameNew = vFilename.split(".png")[0] + str(expand) + ".png"
+                        newPicPath = str(vPath + '/' + vFilenameNew)
+                        if os.path.isfile(newPicPath):
+                            continue
+                        else:
+                            d.screenshot_to_disk(directory=vPath, file_name=str(vFilenameNew))
+                            print('Saved!')
+                            time.sleep(1)
+                            print(' ')
+                            break
             except:
                 print('ERROR: Enter filename and folder path')
                 window.Refresh()
