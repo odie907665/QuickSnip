@@ -1,16 +1,11 @@
-import sys
 import PySimpleGUI as sg 
-import subprocess
-import os
-import d3dshot
-import time
+from actions import takeScreenshot
 
 def Launcher():
     # Print Text to GUI
     def print(line):
         window['output'].update(line)
         window.Refresh()
-    
 
     sg.theme('black')
     sg.set_options(element_padding=(1,1), button_element_size=(10,1), auto_size_buttons=False)
@@ -33,33 +28,19 @@ def Launcher():
         if event == 'x' or event == sg.WIN_CLOSED:
             break
         if event == 'snip':
+            print('Saving screenshot...please wait')
+            vFilename = values['-vFilename-']
+            vPath = values['-vFolder-']
             try:
-                print('Saving screenshot...please wait')
-                d = d3dshot.create()
-                vFilename = values['-vFilename-']
-                vPath = values['-vFolder-']
-                picPath = str(vPath + '/' + vFilename + '.png')
-                if os.path.isfile(picPath):
-                    expand = 1
-                    while True:
-                        expand += 1
-                        vFilenameNew = vFilename.split('.png')[0] + str(expand)
-                        newPicPath = str(vPath + '/' + vFilenameNew + '.png')
-                        if os.path.isfile(newPicPath):
-                            continue
-                        else:
-                            vFilename = vFilenameNew
-                            d.screenshot_to_disk(directory=vPath, file_name=str(vFilename + '.png'))
-                            print('Saved!')
-                            window.read(timeout=1000)
-                            print(' ')
-                            break
-            except:
-                print('ERROR: Enter filename and folder path')
-                window.Refresh()
-                window.read(timeout=5000)
+                takeScreenshot(vPath, vFilename)
+                print('Saved!')
+                window.read(timeout=1000)
                 print(' ')
-
+            except:
+                print('Error! Screenshot not saved')
+                window.read(timeout=2000)
+                print(' ')
+ 
 if __name__ == '__main__':
     Launcher()
             
