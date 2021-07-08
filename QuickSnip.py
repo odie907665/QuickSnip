@@ -1,5 +1,5 @@
 import PySimpleGUI as sg 
-from actions import takeScreenshot
+import actions
 
 def Launcher():
     # Print Text to GUI
@@ -32,7 +32,7 @@ def Launcher():
             vFilename = values['-vFilename-']
             vPath = values['-vFolder-']
             try:
-                takeScreenshot(vPath, vFilename)
+                actions.takeScreenshot(vPath, vFilename)
                 print('Saved!')
                 window.read(timeout=1000)
                 print(' ')
