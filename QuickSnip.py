@@ -6,11 +6,13 @@ import d3dshot
 import time
 
 def Launcher():
+    # Print Text to GUI
     def print(line):
         window['output'].update(line)
         window.Refresh()
-    sg.theme('black')
+    
 
+    sg.theme('black')
     sg.set_options(element_padding=(1,1), button_element_size=(10,1), auto_size_buttons=False)
 
     col1 = [[sg.Text('Save Options', font='Calibri 8')],
@@ -41,14 +43,15 @@ def Launcher():
                     expand = 1
                     while True:
                         expand += 1
-                        vFilenameNew = vFilename.split(".png")[0] + str(expand) + ".png"
-                        newPicPath = str(vPath + '/' + vFilenameNew)
+                        vFilenameNew = vFilename.split('.png')[0] + str(expand)
+                        newPicPath = str(vPath + '/' + vFilenameNew + '.png')
                         if os.path.isfile(newPicPath):
                             continue
                         else:
-                            d.screenshot_to_disk(directory=vPath, file_name=str(vFilenameNew))
+                            vFilename = vFilenameNew
+                            d.screenshot_to_disk(directory=vPath, file_name=str(vFilename + '.png'))
                             print('Saved!')
-                            time.sleep(1)
+                            window.read(timeout=1000)
                             print(' ')
                             break
             except:
