@@ -3,7 +3,7 @@ import d3dshot
 import time
 
 def takeScreenshot(vPath, vFilename):
-    d = d3dshot.create()
+    captureScreen = d3dshot.create()
     picPath = str(vPath + '/' + vFilename + '.png')
     if os.path.isfile(picPath):
         expand = 1
@@ -17,4 +17,4 @@ def takeScreenshot(vPath, vFilename):
                 vFilename = vFilenameNew
                 break
     
-    d.screenshot_to_disk(directory=vPath, file_name=str(vFilename + '.png'))
+    captureScreen.screenshot_to_disk(directory=vPath, file_name=str(vFilename + '.png'))
